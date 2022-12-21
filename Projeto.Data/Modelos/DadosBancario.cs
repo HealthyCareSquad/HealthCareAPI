@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HealthyCare.Modelos;
+namespace Projeto.Data.Modelos;
 
 public partial class DadosBancario
 {
@@ -19,5 +19,5 @@ public partial class DadosBancario
 
     public int IdProfissional { get; set; }
 
-    public virtual Profissional IdProfissionalNavigation { get; set; } = null!;
+    public virtual Profissional? IdProfissionalNavigation { get; set; } = null!;
 }

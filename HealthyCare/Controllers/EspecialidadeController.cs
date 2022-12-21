@@ -2,31 +2,32 @@
 using Microsoft.AspNetCore.Mvc;
 using Projeto.Data.Dto;
 
+
 namespace HealthyCare.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BeneficiarioController : ControllerBase
+    public class EspecialidadeController : ControllerBase
     {
-        private readonly Projeto.Data.Interfaces.IBeneficiarioRepository _beneficiarioRepository;
+        private readonly Projeto.Data.Interfaces.IEspecialidadeRepository _especialidadeRepository;
 
-        public BeneficiarioController(
-            Projeto.Data.Interfaces.IBeneficiarioRepository beneficiarioRepository)
+        public EspecialidadeController(
+            Projeto.Data.Interfaces.IEspecialidadeRepository especialidadeRepository)
         {
-            _beneficiarioRepository = beneficiarioRepository;
+            _especialidadeRepository = especialidadeRepository;
         }
 
 
 
         [HttpGet]
         [Route("api/Consultar")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Projeto.Data.Dto.BeneficiarioDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Projeto.Data.Dto.EspecialidadeDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Consultar()
         {
             try
             {
-                List<BeneficiarioDto> resultado = _beneficiarioRepository.Listar();
+                List<EspecialidadeDto> resultado = _especialidadeRepository.Listar();
 
                 if (resultado == null)
                 {
@@ -49,7 +50,7 @@ namespace HealthyCare.Controllers
         // Anotação de uso do Verb HTTP Get
         [HttpGet]
         [Route("api/Consultar/{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Projeto.Data.Dto.BeneficiarioDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Projeto.Data.Dto.EspecialidadeDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Consultar(int id)
         {
@@ -58,7 +59,7 @@ namespace HealthyCare.Controllers
 
             try
             {
-                BeneficiarioDto resultado = _beneficiarioRepository.Consultar(id);
+                EspecialidadeDto resultado = _especialidadeRepository.Consultar(id);
 
                 if (resultado == null)
                     return NoContent();
@@ -75,7 +76,7 @@ namespace HealthyCare.Controllers
         [Route("api/Cadastrar")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Cadastrar(BeneficiarioDto cadastrarDto)
+        public IActionResult Cadastrar(EspecialidadeDto cadastrarDto)
         {
             if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.Nome))
                 return NoContent();
@@ -87,7 +88,7 @@ namespace HealthyCare.Controllers
         [Route("api/Atualizar")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Atualizar(BeneficiarioDto cadastrarDto)
+        public IActionResult Atualizar(EspecialidadeDto cadastrarDto)
         {
             if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.Nome))
                 return NoContent();

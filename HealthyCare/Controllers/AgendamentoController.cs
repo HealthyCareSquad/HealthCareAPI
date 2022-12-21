@@ -6,27 +6,27 @@ namespace HealthyCare.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BeneficiarioController : ControllerBase
+    public class AgendamentoController : ControllerBase
     {
-        private readonly Projeto.Data.Interfaces.IBeneficiarioRepository _beneficiarioRepository;
+        private readonly Projeto.Data.Interfaces.IAgendamentoRepository _agendamentoRepository;
 
-        public BeneficiarioController(
-            Projeto.Data.Interfaces.IBeneficiarioRepository beneficiarioRepository)
+        public AgendamentoController(
+            Projeto.Data.Interfaces.IAgendamentoRepository agendamentoRepository)
         {
-            _beneficiarioRepository = beneficiarioRepository;
+            _agendamentoRepository = agendamentoRepository;
         }
 
 
 
         [HttpGet]
         [Route("api/Consultar")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Projeto.Data.Dto.BeneficiarioDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Projeto.Data.Dto.AgendamentoDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Consultar()
         {
             try
             {
-                List<BeneficiarioDto> resultado = _beneficiarioRepository.Listar();
+                List<AgendamentoDto> resultado = _agendamentoRepository.Listar();
 
                 if (resultado == null)
                 {
@@ -49,7 +49,7 @@ namespace HealthyCare.Controllers
         // Anotação de uso do Verb HTTP Get
         [HttpGet]
         [Route("api/Consultar/{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Projeto.Data.Dto.BeneficiarioDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Projeto.Data.Dto.AgendamentoDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Consultar(int id)
         {
@@ -58,7 +58,7 @@ namespace HealthyCare.Controllers
 
             try
             {
-                BeneficiarioDto resultado = _beneficiarioRepository.Consultar(id);
+                AgendamentoDto resultado = _agendamentoRepository.Consultar(id);
 
                 if (resultado == null)
                     return NoContent();
@@ -75,9 +75,9 @@ namespace HealthyCare.Controllers
         [Route("api/Cadastrar")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Cadastrar(BeneficiarioDto cadastrarDto)
+        public IActionResult Cadastrar(AgendamentoDto cadastrarDto)
         {
-            if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.Nome))
+            if (cadastrarDto == null || cadastrarDto. IdHospital< 1)
                 return NoContent();
 
             return BadRequest();
@@ -87,9 +87,9 @@ namespace HealthyCare.Controllers
         [Route("api/Atualizar")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Atualizar(BeneficiarioDto cadastrarDto)
+        public IActionResult Atualizar(AgendamentoDto cadastrarDto)
         {
-            if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.Nome))
+            if (cadastrarDto == null || cadastrarDto.IdAgendamento < 1)
                 return NoContent();
 
             return BadRequest();

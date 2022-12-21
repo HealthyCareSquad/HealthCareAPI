@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HealthyCare.Modelos;
+namespace Projeto.Data.Modelos;
 
 public partial class Beneficiario
 {

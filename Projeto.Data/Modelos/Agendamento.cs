@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HealthyCare.Modelos;
+namespace Projeto.Data.Modelos;
 
-public partial class AgendamentoConfiguracao
+public partial class Agendamento
 {
-    public int IdConfiguracao { get; set; }
+    public int IdAgendamento { get; set; }
 
     public int IdHospital { get; set; }
 
@@ -13,9 +13,13 @@ public partial class AgendamentoConfiguracao
 
     public int IdProfissional { get; set; }
 
-    public DateTime DataHoraInicioAtendimento { get; set; }
+    public DateTime DataHoraAgendamento { get; set; }
 
-    public DateTime DataHoraFinalAtendimento { get; set; }
+    public int IdBeneficiario { get; set; }
+
+    public bool Ativo { get; set; }
+
+    public virtual Beneficiario IdBeneficiarioNavigation { get; set; } = null!;
 
     public virtual Especialidade IdEspecialidadeNavigation { get; set; } = null!;
 

@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HealthyCare.Modelos;
+namespace Projeto.Data.Modelos;
 
-public partial class Hospital
+public partial class Especialidade
 {
-    public int IdHospital { get; set; }
+    public int IdEspecialidade { get; set; }
 
     public string Nome { get; set; } = null!;
 
-    public string? Cnpj { get; set; }
-
-    public string? Endereço { get; set; }
-
-    public string? Telefone { get; set; }
-
-    public string? Cnes { get; set; }
+    public string? Descrição { get; set; }
 
     public bool Ativo { get; set; }
 

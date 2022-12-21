@@ -1,7 +1,7 @@
-﻿using HealthyCare.Modelos;
-using HealthyCare.Repository.Context;
+﻿using Projeto.Data.Context;
+using Projeto.Data.Modelos;
 
-namespace HealthyCare.Repository
+namespace Projeto.Data.Repository
 {
     public class BeneficiarioRepository
     {
