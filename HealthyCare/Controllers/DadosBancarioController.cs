@@ -78,12 +78,20 @@ namespace HealthyCare.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Cadastrar(DadosBancarioDto cadastrarDto)
         {
-            if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.NumeroBanco))
-                return NoContent();
+            try
+            {
+                if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.NumeroBanco))
+                {
+                    return NoContent();
 
-            _dadosBancarioRepository.Cadastrar(cadastrarDto);
-
-            return BadRequest();
+                }
+                _dadosBancarioRepository.Cadastrar(cadastrarDto);
+                return Ok();
+            }
+            catch (KeyNotFoundException)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPatch]
@@ -92,12 +100,14 @@ namespace HealthyCare.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Atualizar(DadosBancarioDto cadastrarDto)
         {
-            if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.NumeroBanco))
-                return NoContent();
-
-            _dadosBancarioRepository.Atualizar(cadastrarDto);
-
-            return BadRequest();
+            try
+            {
+                return Ok(_dadosBancarioRepository.Atualizar(cadastrarDto));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpDelete]
@@ -106,12 +116,14 @@ namespace HealthyCare.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Excluir(int id)
         {
-            if (id < 1)
-                return NoContent();
-
-            _dadosBancarioRepository.Excluir(id);
-
-            return BadRequest();
+            try
+            {
+                return Ok(_dadosBancarioRepository.Excluir(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

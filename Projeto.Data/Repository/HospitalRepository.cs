@@ -86,19 +86,18 @@ namespace Projeto.Data.Repository
                 return 0;
             }
 
-            Modelos.Hospital hospitalModelos = new Modelos.Hospital()
-            {
-                IdHospital = cadastrarDto.IdHospital,
-                Nome = cadastrarDto.Nome,
-                Cnpj = cadastrarDto.Cnpj,
-                Endereço = cadastrarDto.Endereço,
-                Telefone = cadastrarDto.Telefone,
-                Cnes = cadastrarDto.Cnes,
-                Ativo = cadastrarDto.Ativo,
-            };
+
+            hospitalModeloBanco.IdHospital = cadastrarDto.IdHospital;
+            hospitalModeloBanco.Nome = cadastrarDto.Nome;
+            hospitalModeloBanco.Cnpj = cadastrarDto.Cnpj;
+            hospitalModeloBanco.Endereço = cadastrarDto.Endereço;
+            hospitalModeloBanco.Telefone = cadastrarDto.Telefone;
+            hospitalModeloBanco.Cnes = cadastrarDto.Cnes;
+            hospitalModeloBanco.Ativo = cadastrarDto.Ativo;
+            
 
             _context.ChangeTracker.Clear();
-            _context.Hospitals.Add(hospitalModelos);
+            _context.Hospitals.Update(hospitalModeloBanco);
             return _context.SaveChanges();
         }
 

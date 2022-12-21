@@ -78,12 +78,19 @@ namespace HealthyCare.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Cadastrar(EspecialidadeDto cadastrarDto)
         {
-            if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.Nome))
-                return NoContent();
+            try
+            {
+                if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.Nome))
+                    return NoContent();
 
-            _especialidadeRepository.Cadastrar(cadastrarDto);
+                _especialidadeRepository.Cadastrar(cadastrarDto);
+                return Ok();
+            }
+            catch (KeyNotFoundException)
+            {
+                return BadRequest();
+            }
 
-            return BadRequest();
         }
 
         [HttpPatch]
@@ -92,12 +99,14 @@ namespace HealthyCare.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Atualizar(EspecialidadeDto cadastrarDto)
         {
-            if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.Nome))
-                return NoContent();
-
-            _especialidadeRepository.Atualizar(cadastrarDto);
-
-            return BadRequest();
+            try
+            {
+                return Ok(_especialidadeRepository.Atualizar(cadastrarDto));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpDelete]
@@ -106,12 +115,14 @@ namespace HealthyCare.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Excluir(int id)
         {
-            if (id < 1)
-                return NoContent();
-
-            _especialidadeRepository.Excluir(id);
-
-            return BadRequest();
+            try
+            {
+                return Ok(_especialidadeRepository.Excluir(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

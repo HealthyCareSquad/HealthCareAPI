@@ -70,16 +70,13 @@ namespace Projeto.Data.Repository
                 return 0;
             }
 
-            Modelos.Especialidade especialidadeModelos = new Modelos.Especialidade()
-            {
-                IdEspecialidade = cadastrarDto.IdEspecialidade,
-                Nome = cadastrarDto.Nome,
-                Descrição = cadastrarDto.Descrição,
-                Ativo = cadastrarDto.Ativo,
-            };
+            especialidadeModeloBanco.IdEspecialidade = cadastrarDto.IdEspecialidade;
+            especialidadeModeloBanco.Nome = cadastrarDto.Nome;
+            especialidadeModeloBanco.Descrição = cadastrarDto.Descrição;
+            especialidadeModeloBanco.Ativo = cadastrarDto.Ativo;
 
             _context.ChangeTracker.Clear();
-            _context.Especialidades.Add(especialidadeModelos);
+            _context.Especialidades.Update(especialidadeModeloBanco);
             return _context.SaveChanges();
         }
 

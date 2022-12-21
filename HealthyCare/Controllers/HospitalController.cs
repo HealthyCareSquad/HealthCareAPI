@@ -79,12 +79,18 @@ namespace HealthyCare.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Cadastrar(HospitalDto cadastrarDto)
         {
-            if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.Nome))
-                return NoContent();
+            try
+            {
+                if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.Nome))
+                    return NoContent();
 
-            _hospitalRepository.Cadastrar(cadastrarDto);
-
-            return BadRequest();
+                _hospitalRepository.Cadastrar(cadastrarDto);
+                return Ok();
+            }
+            catch (KeyNotFoundException)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPatch]
@@ -93,12 +99,16 @@ namespace HealthyCare.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Atualizar(HospitalDto cadastrarDto)
         {
-            if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.Nome))
-                return NoContent();
 
-            _hospitalRepository.Atualizar(cadastrarDto);
+            try
+            {
+                return Ok(_hospitalRepository.Atualizar(cadastrarDto));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
 
-            return BadRequest();
         }
 
         [HttpDelete]
@@ -107,12 +117,14 @@ namespace HealthyCare.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Excluir(int id)
         {
-            if (id < 1)
-                return NoContent();
-
-            _hospitalRepository.Excluir(id);
-
-            return Ok();
+            try
+            {
+                return Ok(_hospitalRepository.Excluir(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

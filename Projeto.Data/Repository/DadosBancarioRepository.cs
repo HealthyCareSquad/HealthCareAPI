@@ -80,19 +80,16 @@ namespace Projeto.Data.Repository
                 return 0;
             }
 
-            Modelos.DadosBancario dadosBancarioModelos = new Modelos.DadosBancario()
-            {
-                IdDadosBancarios = cadastrarDto.IdDadosBancarios,
-                NumeroBanco = cadastrarDto.NumeroBanco,
-                CodigoPix = cadastrarDto.CodigoPix,
-                Agencia = cadastrarDto.Agencia,
-                NumeroConta = cadastrarDto.NumeroConta,
-                Poupanca = cadastrarDto.Poupanca,
-                IdProfissional = cadastrarDto.IdProfissional,
-            };
+            dadosBancarioModeloBanco.IdDadosBancarios = cadastrarDto.IdDadosBancarios;
+            dadosBancarioModeloBanco.NumeroBanco = cadastrarDto.NumeroBanco;
+            dadosBancarioModeloBanco.CodigoPix = cadastrarDto.CodigoPix;
+            dadosBancarioModeloBanco.Agencia = cadastrarDto.Agencia;
+            dadosBancarioModeloBanco.NumeroConta = cadastrarDto.NumeroConta;
+            dadosBancarioModeloBanco.Poupanca = cadastrarDto.Poupanca;
+            dadosBancarioModeloBanco.IdProfissional = cadastrarDto.IdProfissional;
 
             _context.ChangeTracker.Clear();
-            _context.DadosBancarios.Add(dadosBancarioModelos);
+            _context.DadosBancarios.Update(dadosBancarioModeloBanco);
             return _context.SaveChanges();
         }
 

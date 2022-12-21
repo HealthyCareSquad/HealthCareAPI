@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Projeto.Data.Dto;
+using Projeto.Data.Interfaces;
+using Projeto.Data.Modelos;
+using Projeto.Data.Repository;
 
 namespace HealthyCare.Controllers
 {
@@ -15,7 +19,6 @@ namespace HealthyCare.Controllers
         {
             _beneficiarioRepository = beneficiarioRepository;
         }
-
 
 
         [HttpGet]
@@ -77,10 +80,21 @@ namespace HealthyCare.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Cadastrar(BeneficiarioDto cadastrarDto)
         {
-            if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.Nome))
-                return NoContent();
+            try
+            {
+                if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.Nome))
+                {
+                    return NoContent();
+                }
 
-            return BadRequest();
+                _beneficiarioRepository.Cadastrar(cadastrarDto);
+                return Ok();
+            }
+
+            catch (KeyNotFoundException)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPatch]
@@ -89,10 +103,14 @@ namespace HealthyCare.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Atualizar(BeneficiarioDto cadastrarDto)
         {
-            if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.Nome))
-                return NoContent();
-
-            return BadRequest();
+            try
+            {
+                return Ok(_beneficiarioRepository.Atualizar(cadastrarDto));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpDelete]
@@ -101,10 +119,14 @@ namespace HealthyCare.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Excluir(int id)
         {
-            if (id < 1)
-                return NoContent();
-
-            return BadRequest();
+            try
+            {
+                return Ok(_beneficiarioRepository.Excluir(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

@@ -81,22 +81,38 @@ namespace HealthyCare.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Cadastrar(AgendamentoConfiguracaoDto cadastrarDto)
         {
-            if (cadastrarDto == null || cadastrarDto.IdHospital < 1)
-                return NoContent();
+            try
+            {
+                if (cadastrarDto == null || cadastrarDto.IdHospital < 1)
+                {
+                    return NoContent();
+                }
 
-            return BadRequest();
+                _agendamentoConfiguracaoRepository.Cadastrar(cadastrarDto);
+                return Ok();
+
+
+            }
+            catch (KeyNotFoundException)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPatch]
         [Route("api/Atualizar")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult AtualizarTurma(AgendamentoConfiguracaoDto cadastrarDto)
+        public IActionResult Atualizar(AgendamentoConfiguracaoDto cadastrarDto)
         {
-            if (cadastrarDto == null || cadastrarDto.IdConfiguracao < 1)
-                return NoContent();
-
-            return BadRequest();
+            try
+            {
+                return Ok(_agendamentoConfiguracaoRepository.Atualizar(cadastrarDto));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpDelete]
@@ -105,10 +121,14 @@ namespace HealthyCare.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Excluir(int id)
         {
-            if (id < 1)
-                return NoContent();
-
-            return BadRequest();
+            try
+            {
+                return Ok(_agendamentoConfiguracaoRepository.Excluir(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

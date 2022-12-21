@@ -81,19 +81,17 @@ namespace Projeto.Data.Repository
                 return 0;
             }
 
-            Modelos.Agendamento agendamentoModelo = new Modelos.Agendamento()
-            {
-                IdAgendamento = cadastrarDto.IdAgendamento,
-                IdHospital = cadastrarDto.IdHospital,
-                IdEspecialidade = cadastrarDto.IdEspecialidade,
-                IdProfissional = cadastrarDto.IdProfissional,
-                DataHoraAgendamento = cadastrarDto.DataHoraAgendamento,
-                IdBeneficiario = cadastrarDto.IdBeneficiario,
-                Ativo = cadastrarDto.Ativo
-            };
+
+            agendamentoModeloBanco.IdAgendamento = cadastrarDto.IdAgendamento;
+            agendamentoModeloBanco.IdHospital = cadastrarDto.IdHospital;
+            agendamentoModeloBanco.IdEspecialidade = cadastrarDto.IdEspecialidade;
+            agendamentoModeloBanco.IdProfissional = cadastrarDto.IdProfissional;
+            agendamentoModeloBanco.DataHoraAgendamento = cadastrarDto.DataHoraAgendamento;
+            agendamentoModeloBanco.IdBeneficiario = cadastrarDto.IdBeneficiario;
+           
 
             _context.ChangeTracker.Clear();
-            _context.Agendamentos.Add(agendamentoModelo);
+            _context.Agendamentos.Update(agendamentoModeloBanco);
             return _context.SaveChanges();
         }
 

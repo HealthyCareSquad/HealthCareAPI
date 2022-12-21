@@ -91,20 +91,19 @@ namespace Projeto.Data.Repository
                 return 0;
             }
 
-            Modelos.Beneficiario beneficiarioModelo = new Modelos.Beneficiario()
-            {
-                Nome = cadastrarDto.Nome,
-                Cpf = cadastrarDto.Cpf,
-                Telefone = cadastrarDto.Telefone,
-                Endereco = cadastrarDto.Endereco,
-                NumeroCarteirinha = cadastrarDto.NumeroCarteirinha,
-                Ativo = cadastrarDto.Ativo,
-                Email = cadastrarDto.Email,
-                Senha = cadastrarDto.Senha
-            };
+
+            benefiarioModeloBanco.Nome = cadastrarDto.Nome;
+            benefiarioModeloBanco.Cpf = cadastrarDto.Cpf;
+            benefiarioModeloBanco.Telefone = cadastrarDto.Telefone;
+            benefiarioModeloBanco.Endereco = cadastrarDto.Endereco;
+            benefiarioModeloBanco.NumeroCarteirinha = cadastrarDto.NumeroCarteirinha;
+            benefiarioModeloBanco.Ativo = cadastrarDto.Ativo;
+            benefiarioModeloBanco.Email = cadastrarDto.Email;
+            benefiarioModeloBanco.Senha = cadastrarDto.Senha;
+           
 
             _context.ChangeTracker.Clear();
-            _context.Beneficiarios.Add(beneficiarioModelo);
+            _context.Beneficiarios.Update(benefiarioModeloBanco);
             return _context.SaveChanges();
         }
 

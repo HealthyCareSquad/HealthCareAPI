@@ -73,17 +73,15 @@ namespace Projeto.Data.Repository
                 return 0;
             }
 
-            Modelos.Profissional profissionalModelos = new Modelos.Profissional()
-            {
-                IdProfissional = cadastrarDto.IdProfissional,
-                Nome = cadastrarDto.Nome,
-                Endereço = cadastrarDto.Endereço,
-                Telefone = cadastrarDto.Telefone,
-                Ativo = cadastrarDto.Ativo,
-            };
+            professionalModeloBanco.IdProfissional = cadastrarDto.IdProfissional;
+            professionalModeloBanco.Nome = cadastrarDto.Nome;
+            professionalModeloBanco.Endereço = cadastrarDto.Endereço;
+            professionalModeloBanco.Telefone = cadastrarDto.Telefone;
+            professionalModeloBanco.Ativo = cadastrarDto.Ativo;
+            
 
             _context.ChangeTracker.Clear();
-            _context.Profissionals.Add(profissionalModelos);
+            _context.Profissionals.Update(professionalModeloBanco);
             return _context.SaveChanges();
         }
 
