@@ -81,6 +81,8 @@ namespace HealthyCare.Controllers
             if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.NumeroBanco))
                 return NoContent();
 
+            _dadosBancarioRepository.Cadastrar(cadastrarDto);
+
             return BadRequest();
         }
 
@@ -93,6 +95,8 @@ namespace HealthyCare.Controllers
             if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.NumeroBanco))
                 return NoContent();
 
+            _dadosBancarioRepository.Atualizar(cadastrarDto);
+
             return BadRequest();
         }
 
@@ -104,6 +108,8 @@ namespace HealthyCare.Controllers
         {
             if (id < 1)
                 return NoContent();
+
+            _dadosBancarioRepository.Excluir(id);
 
             return BadRequest();
         }
