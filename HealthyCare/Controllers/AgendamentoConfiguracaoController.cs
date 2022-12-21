@@ -88,6 +88,7 @@ namespace HealthyCare.Controllers
                     return NoContent();
                 }
 
+
                 int retornoCadastrar = _agendamentoConfiguracaoRepository.Cadastrar(cadastrarDto);
                 return Ok(retornoCadastrar);
 
@@ -97,6 +98,11 @@ namespace HealthyCare.Controllers
             {
                 return BadRequest();
             }
+
+            _agendamentoConfiguracaoRepository.Cadastrar(cadastrarDto);
+
+            return BadRequest();
+
         }
 
         [HttpPatch]
@@ -105,6 +111,7 @@ namespace HealthyCare.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Atualizar(AgendamentoConfiguracaoDto cadastrarDto)
         {
+
             try
             {
                 return Ok(_agendamentoConfiguracaoRepository.Atualizar(cadastrarDto));
@@ -113,6 +120,14 @@ namespace HealthyCare.Controllers
             {
                 return BadRequest(e.Message);
             }
+
+            if (cadastrarDto == null || cadastrarDto.IdConfiguracao < 1)
+                return NoContent();
+
+            _agendamentoConfiguracaoRepository.Atualizar(cadastrarDto);
+
+            return BadRequest();
+
         }
 
         [HttpDelete]
@@ -121,6 +136,7 @@ namespace HealthyCare.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Excluir(int id)
         {
+
             try
             {
                 return Ok(_agendamentoConfiguracaoRepository.Excluir(id));
@@ -129,6 +145,13 @@ namespace HealthyCare.Controllers
             {
                 return BadRequest(e.Message);
             }
+
+            if (id < 1)
+                return NoContent();
+            _agendamentoConfiguracaoRepository.Excluir(id);
+
+            return BadRequest();
+
         }
     }
 }

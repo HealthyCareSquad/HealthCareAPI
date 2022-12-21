@@ -85,11 +85,17 @@ namespace HealthyCare.Controllers
                 int retornoCadastrar = _agendamentoRepository.Cadastrar(cadastrarDto);
                 return Ok(retornoCadastrar);
 
+
             }
             catch (KeyNotFoundException)
             {
                 return BadRequest();
             }
+
+            _agendamentoRepository.Cadastrar(cadastrarDto);
+
+            return BadRequest();
+
         }
 
         [HttpPatch]
@@ -98,6 +104,7 @@ namespace HealthyCare.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Atualizar(AgendamentoDto cadastrarDto)
         {
+
             try
             {
                 return Ok(_agendamentoRepository.Atualizar(cadastrarDto));
@@ -106,6 +113,14 @@ namespace HealthyCare.Controllers
             {
                 return BadRequest(e.Message);
             }
+
+            if (cadastrarDto == null || cadastrarDto.IdAgendamento < 1)
+                return NoContent();
+
+            _agendamentoRepository.Atualizar(cadastrarDto);
+
+            return BadRequest();
+
         }
 
         [HttpDelete]
@@ -114,6 +129,7 @@ namespace HealthyCare.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Excluir(int id)
         {
+
             try
             {
                 return Ok(_agendamentoRepository.Excluir(id));
@@ -122,6 +138,7 @@ namespace HealthyCare.Controllers
             {
                 return BadRequest(e.Message);
             }
+
         }
     }
 }
