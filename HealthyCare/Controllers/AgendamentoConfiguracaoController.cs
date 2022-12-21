@@ -88,8 +88,8 @@ namespace HealthyCare.Controllers
                     return NoContent();
                 }
 
-                _agendamentoConfiguracaoRepository.Cadastrar(cadastrarDto);
-                return Ok();
+                int retornoCadastrar = _agendamentoConfiguracaoRepository.Cadastrar(cadastrarDto);
+                return Ok(retornoCadastrar);
 
 
             }

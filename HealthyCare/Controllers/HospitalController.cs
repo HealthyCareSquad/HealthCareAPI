@@ -84,8 +84,8 @@ namespace HealthyCare.Controllers
                 if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.Nome))
                     return NoContent();
 
-                _hospitalRepository.Cadastrar(cadastrarDto);
-                return Ok();
+                int retornoCadastrar = _hospitalRepository.Cadastrar(cadastrarDto);
+                return Ok(retornoCadastrar);
             }
             catch (KeyNotFoundException)
             {

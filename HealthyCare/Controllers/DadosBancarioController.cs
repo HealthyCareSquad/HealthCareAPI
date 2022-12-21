@@ -85,8 +85,8 @@ namespace HealthyCare.Controllers
                     return NoContent();
 
                 }
-                _dadosBancarioRepository.Cadastrar(cadastrarDto);
-                return Ok();
+                int retornoCadastrar = _dadosBancarioRepository.Cadastrar(cadastrarDto);
+                return Ok(retornoCadastrar);
             }
             catch (KeyNotFoundException)
             {
