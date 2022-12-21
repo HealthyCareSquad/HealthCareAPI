@@ -1,52 +1,107 @@
 ﻿using Projeto.Data.Context;
+using Projeto.Data.Dto;
+using Projeto.Data.Interfaces;
 using Projeto.Data.Modelos;
 
 namespace Projeto.Data.Repository
 {
-    public class ProfissionalRepository
+    public class ProfissionalRepository : IProfissionalRepository
     {
-        private readonly DataBaseContext context;
+        private readonly Context.DataBaseContext _context;
 
-        public ProfissionalRepository()
+        public ProfissionalRepository(Context.DataBaseContext context)
         {
-            // Criando um instância da classe de contexto do EntityFramework
-            context = new DataBaseContext();
+            _context = context;
         }
 
-        public IList<Profissional> Listar()
+        public List<Dto.ProfissionalDto> Listar()
         {
-
-            return context.Profissionals.ToList();
+            return (from t in _context.Profissionals
+                    select new Dto.ProfissionalDto()
+                    {
+                        IdProfissional = t.IdProfissional,
+                        Nome = t.Nome,
+                        Telefone = t.Telefone,
+                        Endereço = t.Endereço,
+                        Ativo = t.Ativo
+                    }).ToList();
         }
 
-        public Profissional Consultar(int id)
+        public ProfissionalDto Consultar(int id)
         {
-            return context.Profissionals.Find(id);
+            return (from t in _context.Profissionals
+                    where t.IdProfissional == id
+                    select new Dto.ProfissionalDto()
+                    {
+                        IdProfissional = t.IdProfissional,
+                        Nome = t.Nome,
+                        Telefone = t.Telefone,
+                        Endereço = t.Endereço,
+                        Ativo = t.Ativo
+                    })
+                    ?.FirstOrDefault()
+                    ?? new ProfissionalDto();
         }
 
-
-        public void Inserir(Profissional profissional)
+        public int Cadastrar(ProfissionalDto cadastrarDto)
         {
-            context.Profissionals.Add(profissional);
-            context.SaveChanges();
-        }
-
-        public void Alterar(Profissional profissional)
-        {
-            context.Profissionals.Update(profissional);
-            context.SaveChanges();
-        }
-
-        public void Excluir(int id)
-        {
-            // Criar um tipo produto apenas com o Id
-            var profissional = new Profissional()
+            Modelos.Profissional profissionalModelos = new Modelos.Profissional()
             {
-                IdProfissional = id
+                IdProfissional = cadastrarDto.IdProfissional,
+                Nome = cadastrarDto.Nome,
+                Endereço = cadastrarDto.Endereço,
+                Telefone = cadastrarDto.Telefone,
+                Ativo = cadastrarDto.Ativo,
             };
 
-            context.Profissionals.Remove(profissional);
-            context.SaveChanges();
+            _context.ChangeTracker.Clear();
+            _context.Profissionals.Add(profissionalModelos);
+            return _context.SaveChanges();
+        }
+
+        public int Atualizar(ProfissionalDto cadastrarDto)
+        {
+            Modelos.Profissional professionalModeloBanco =
+                (from c in _context.Profissionals
+                 where c.IdProfissional == cadastrarDto.IdProfissional
+                 select c)
+                 ?.FirstOrDefault()
+                 ?? new Modelos.Profissional();
+
+            if (professionalModeloBanco == null || DBNull.Value.Equals(professionalModeloBanco.IdProfissional) || professionalModeloBanco.IdProfissional == 0)
+            {
+                return 0;
+            }
+
+            Modelos.Profissional profissionalModelos = new Modelos.Profissional()
+            {
+                IdProfissional = cadastrarDto.IdProfissional,
+                Nome = cadastrarDto.Nome,
+                Endereço = cadastrarDto.Endereço,
+                Telefone = cadastrarDto.Telefone,
+                Ativo = cadastrarDto.Ativo,
+            };
+
+            _context.ChangeTracker.Clear();
+            _context.Profissionals.Add(profissionalModelos);
+            return _context.SaveChanges();
+        }
+
+        public int Excluir(int Id)
+        {
+            Modelos.Profissional professionalModeloBanco =
+                (from c in _context.Profissionals
+                 where c.IdProfissional == Id
+                 select c).FirstOrDefault();
+
+            if (professionalModeloBanco == null || DBNull.Value.Equals(professionalModeloBanco.IdProfissional) || professionalModeloBanco.IdProfissional == 0)
+            {
+                return 0;
+            }
+
+            _context.ChangeTracker.Clear();
+            _context.Profissionals.Remove(professionalModeloBanco);
+            return _context.SaveChanges();
         }
     }
 }

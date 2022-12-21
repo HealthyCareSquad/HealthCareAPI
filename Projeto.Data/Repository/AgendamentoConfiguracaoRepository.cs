@@ -1,52 +1,113 @@
 ﻿using Projeto.Data.Context;
+using Projeto.Data.Dto;
+using Projeto.Data.Interfaces;
 using Projeto.Data.Modelos;
 
 namespace Projeto.Data.Repository
 {
-    public class AgendamentoConfiguracaoRepository
+    public class AgendamentoConfiguracaoRepository : IAgendamentoConfiguracaoRepository
     {
-        private readonly DataBaseContext context;
+        private readonly Context.DataBaseContext _context;
 
-        public AgendamentoConfiguracaoRepository()
+        public AgendamentoConfiguracaoRepository(Context.DataBaseContext context)
         {
-            // Criando um instância da classe de contexto do EntityFramework
-            context = new DataBaseContext();
+            _context = context;
         }
 
-        public IList<AgendamentoConfiguracao> Listar()
+        public List<Dto.AgendamentoConfiguracaoDto> Listar()
         {
-
-            return context.AgendamentoConfiguracaos.ToList();
+            return (from t in _context.AgendamentoConfiguracaos
+                    select new Dto.AgendamentoConfiguracaoDto()
+                    {
+                        IdConfiguracao = t.IdConfiguracao,
+                        IdHospital = t.IdHospital,
+                        IdEspecialidade = t.IdEspecialidade,
+                        IdProfissional = t.IdProfissional,
+                        DataHoraInicioAtendimento = t.DataHoraInicioAtendimento,
+                        DataHoraFinalAtendimento = t.DataHoraFinalAtendimento
+                    }).ToList();
         }
 
-        public AgendamentoConfiguracao Consultar(int id)
+        public AgendamentoConfiguracaoDto Consultar(int id)
         {
-            return context.AgendamentoConfiguracaos.Find(id);
+            return (from t in _context.AgendamentoConfiguracaos
+                    where t.IdConfiguracao == id
+                    select new Dto.AgendamentoConfiguracaoDto()
+                    {
+                        IdConfiguracao = t.IdConfiguracao,
+                        IdHospital = t.IdHospital,
+                        IdEspecialidade = t.IdEspecialidade,
+                        IdProfissional = t.IdProfissional,
+                        DataHoraInicioAtendimento = t.DataHoraInicioAtendimento,
+                        DataHoraFinalAtendimento = t.DataHoraFinalAtendimento
+
+                    })
+                    ?.FirstOrDefault()
+                    ?? new AgendamentoConfiguracaoDto();
         }
 
-
-        public void Inserir(AgendamentoConfiguracao agendamentoConfiguracao)
+        public int Cadastrar(AgendamentoConfiguracaoDto cadastrarDto)
         {
-            context.AgendamentoConfiguracaos.Add(agendamentoConfiguracao);
-            context.SaveChanges();
-        }
-
-        public void Alterar(AgendamentoConfiguracao agendamentoConfiguracao)
-        {
-            context.AgendamentoConfiguracaos.Update(agendamentoConfiguracao);
-            context.SaveChanges();
-        }
-
-        public void Excluir(int id)
-        {
-            // Criar um tipo produto apenas com o Id
-            var agendamentoConfiguracao = new AgendamentoConfiguracao()
+            Modelos.AgendamentoConfiguracao agendamentoConfigModelos = new Modelos.AgendamentoConfiguracao()
             {
-                IdConfiguracao = id
+                IdConfiguracao = cadastrarDto.IdConfiguracao,
+                IdHospital = cadastrarDto.IdHospital,
+                IdEspecialidade = cadastrarDto.IdEspecialidade,
+                IdProfissional = cadastrarDto.IdProfissional,
+                DataHoraInicioAtendimento = cadastrarDto.DataHoraInicioAtendimento,
+                DataHoraFinalAtendimento = cadastrarDto.DataHoraFinalAtendimento
+             
             };
 
-            context.AgendamentoConfiguracaos.Remove(agendamentoConfiguracao);
-            context.SaveChanges();
+            _context.ChangeTracker.Clear();
+            _context.AgendamentoConfiguracaos.Add(agendamentoConfigModelos);
+            return _context.SaveChanges();
+        }
+
+        public int Atualizar(AgendamentoConfiguracaoDto cadastrarDto)
+        {
+            Modelos.AgendamentoConfiguracao agendamentoConfigModeloBanco =
+                (from c in _context.AgendamentoConfiguracaos
+                 where c.IdConfiguracao == cadastrarDto.IdConfiguracao
+                 select c)
+                 ?.FirstOrDefault()
+                 ?? new Modelos.AgendamentoConfiguracao();
+
+            if (agendamentoConfigModeloBanco == null || DBNull.Value.Equals(agendamentoConfigModeloBanco.IdConfiguracao) || agendamentoConfigModeloBanco.IdConfiguracao == 0)
+            {
+                return 0;
+            }
+
+            Modelos.AgendamentoConfiguracao agendamentoConfigModelos = new Modelos.AgendamentoConfiguracao()
+            {
+                IdConfiguracao = cadastrarDto.IdConfiguracao,
+                IdHospital = cadastrarDto.IdHospital,
+                IdEspecialidade = cadastrarDto.IdEspecialidade,
+                IdProfissional = cadastrarDto.IdProfissional,
+                DataHoraInicioAtendimento = cadastrarDto.DataHoraInicioAtendimento,
+                DataHoraFinalAtendimento = cadastrarDto.DataHoraFinalAtendimento
+            };
+
+            _context.ChangeTracker.Clear();
+            _context.AgendamentoConfiguracaos.Add(agendamentoConfigModelos);
+            return _context.SaveChanges();
+        }
+
+        public int Excluir(int Id)
+        {
+            Modelos.AgendamentoConfiguracao agendamentoConfigModeloBanco =
+                (from c in _context.AgendamentoConfiguracaos
+                 where c.IdConfiguracao == Id
+                 select c).FirstOrDefault();
+
+            if (agendamentoConfigModeloBanco == null || DBNull.Value.Equals(agendamentoConfigModeloBanco.IdConfiguracao) || agendamentoConfigModeloBanco.IdConfiguracao == 0)
+            {
+                return 0;
+            }
+
+            _context.ChangeTracker.Clear();
+            _context.AgendamentoConfiguracaos.Remove(agendamentoConfigModeloBanco);
+            return _context.SaveChanges();
         }
     }
 }

@@ -1,52 +1,118 @@
 ﻿using Projeto.Data.Context;
+using Projeto.Data.Dto;
+using Projeto.Data.Interfaces;
 using Projeto.Data.Modelos;
 
 namespace Projeto.Data.Repository
 {
-    public class DadosBancarioRepository
+    public class DadosBancarioRepository : IDadosBancarioRepository
     {
-        private readonly DataBaseContext context;
+        private readonly Context.DataBaseContext _context;
 
-        public DadosBancarioRepository()
+        public DadosBancarioRepository(Context.DataBaseContext context)
         {
-            // Criando um instância da classe de contexto do EntityFramework
-            context = new DataBaseContext();
+            _context = context;
         }
 
-        public IList<DadosBancario> Listar()
+        public List<Dto.DadosBancarioDto> Listar()
         {
-
-            return context.DadosBancarios.ToList();
+            return (from t in _context.DadosBancarios
+                    select new Dto.DadosBancarioDto()
+                    {
+                        IdDadosBancarios = t.IdDadosBancarios,
+                        NumeroBanco = t.NumeroBanco,
+                        CodigoPix = t.CodigoPix,
+                        Agencia = t.Agencia,
+                        NumeroConta = t.NumeroConta,
+                        Poupanca = t.Poupanca,
+                        IdProfissional = t.IdProfissional
+                    }).ToList();
         }
 
-        public DadosBancario Consultar(int id)
+        public DadosBancarioDto Consultar(int id)
         {
-            return context.DadosBancarios.Find(id);
+            return (from t in _context.DadosBancarios
+                    where t.IdDadosBancarios == id
+                    select new Dto.DadosBancarioDto()
+                    {
+                        IdDadosBancarios = t.IdDadosBancarios,
+                        NumeroBanco = t.NumeroBanco,
+                        CodigoPix = t.CodigoPix,
+                        Agencia = t.Agencia,
+                        NumeroConta = t.NumeroConta,
+                        Poupanca = t.Poupanca,
+                        IdProfissional = t.IdProfissional
+
+                    })
+                    ?.FirstOrDefault()
+                    ?? new DadosBancarioDto();
         }
 
-
-        public void Inserir(DadosBancario dadosBancario)
+        public int Cadastrar(DadosBancarioDto cadastrarDto)
         {
-            context.DadosBancarios.Add(dadosBancario);
-            context.SaveChanges();
-        }
-
-        public void Alterar(DadosBancario dadosBancarios)
-        {
-            context.DadosBancarios.Update(dadosBancarios);
-            context.SaveChanges();
-        }
-
-        public void Excluir(int id)
-        {
-            // Criar um tipo produto apenas com o Id
-            var dadosBancario = new DadosBancario()
+            Modelos.DadosBancario dadosBancarioModelos = new Modelos.DadosBancario()
             {
-                IdDadosBancarios = id
+                IdDadosBancarios = cadastrarDto.IdDadosBancarios,
+                NumeroBanco = cadastrarDto.NumeroBanco,
+                CodigoPix = cadastrarDto.CodigoPix,
+                Agencia = cadastrarDto.Agencia,
+                NumeroConta = cadastrarDto.NumeroConta,
+                Poupanca = cadastrarDto.Poupanca,
+                IdProfissional = cadastrarDto.IdProfissional,
             };
 
-            context.DadosBancarios.Remove(dadosBancario);
-            context.SaveChanges();
+            _context.ChangeTracker.Clear();
+            _context.DadosBancarios.Add(dadosBancarioModelos);
+            return _context.SaveChanges();
+        }
+
+        public int Atualizar(DadosBancarioDto cadastrarDto)
+        {
+            Modelos.DadosBancario dadosBancarioModeloBanco =
+                (from c in _context.DadosBancarios
+                 where c.IdDadosBancarios == cadastrarDto.IdDadosBancarios
+                 select c)
+                 ?.FirstOrDefault()
+                 ?? new Modelos.DadosBancario();
+
+            if (dadosBancarioModeloBanco == null || DBNull.Value.Equals(dadosBancarioModeloBanco.IdDadosBancarios) || dadosBancarioModeloBanco.IdDadosBancarios == 0)
+            {
+                return 0;
+            }
+
+            Modelos.DadosBancario dadosBancarioModelos = new Modelos.DadosBancario()
+            {
+                IdDadosBancarios = cadastrarDto.IdDadosBancarios,
+                NumeroBanco = cadastrarDto.NumeroBanco,
+                CodigoPix = cadastrarDto.CodigoPix,
+                Agencia = cadastrarDto.Agencia,
+                NumeroConta = cadastrarDto.NumeroConta,
+                Poupanca = cadastrarDto.Poupanca,
+                IdProfissional = cadastrarDto.IdProfissional,
+            };
+
+            _context.ChangeTracker.Clear();
+            _context.DadosBancarios.Add(dadosBancarioModelos);
+            return _context.SaveChanges();
+        }
+
+        public int Excluir(int Id)
+        {
+            Modelos.DadosBancario dadosBancarioModeloBanco =
+                (from c in _context.DadosBancarios
+                 where c.IdDadosBancarios == Id
+                 select c).FirstOrDefault();
+
+            if (dadosBancarioModeloBanco == null || DBNull.Value.Equals(dadosBancarioModeloBanco.IdDadosBancarios) || dadosBancarioModeloBanco.IdDadosBancarios == 0)
+            {
+                return 0;
+            }
+
+            _context.ChangeTracker.Clear();
+            _context.DadosBancarios.Remove(dadosBancarioModeloBanco);
+            return _context.SaveChanges();
         }
     }
 }
+    
+

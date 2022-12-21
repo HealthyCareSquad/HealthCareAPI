@@ -2,11 +2,17 @@
 {
     public class HospitalDto
     {
-        public int IdEspecialidade { get; set; }
+        public int IdHospital { get; set; }
 
         public string Nome { get; set; } = null!;
 
-        public string? Descrição { get; set; }
+        public string? Cnpj { get; set; }
+
+        public string? Endereço { get; set; }
+
+        public string? Telefone { get; set; }
+
+        public string? Cnes { get; set; }
 
         public bool Ativo { get; set; }
     }

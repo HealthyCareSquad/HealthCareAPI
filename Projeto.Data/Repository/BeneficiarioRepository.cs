@@ -1,52 +1,128 @@
 ﻿using Projeto.Data.Context;
-using Projeto.Data.Modelos;
+using Projeto.Data.Interfaces;
+using Projeto.Data.Dto;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Identity.Client;
 
 namespace Projeto.Data.Repository
 {
-    public class BeneficiarioRepository
+    public class BeneficiarioRepository : IBeneficiarioRepository
     {
-        private readonly DataBaseContext context;
+        private readonly Context.DataBaseContext _context;
 
-        public BeneficiarioRepository()
+        public BeneficiarioRepository(Context.DataBaseContext context)
         {
-            // Criando um instância da classe de contexto do EntityFramework
-            context = new DataBaseContext();
+            _context = context;
         }
 
-        public IList<Beneficiario> Listar()
+        public List<Dto.BeneficiarioDto>Listar()
         {
+            return (from t in _context.Beneficiarios
+                    select new Dto.BeneficiarioDto()
+                    {
+                        IdBeneficiario = t.IdBeneficiario,
+                        Nome = t.Nome,
+                        Cpf = t.Cpf,
+                        Telefone = t.Telefone,
+                        Endereco = t.Endereco,
+                        NumeroCarteirinha = t.NumeroCarteirinha,
+                        Ativo = t.Ativo,
+                        Email = t.Email,
+                        Senha = t.Senha
 
-            return context.Beneficiarios.ToList();
+                    }).ToList();
         }
 
-        public Beneficiario Consultar(int id)
+        public BeneficiarioDto Consultar(int id)
         {
-            return context.Beneficiarios.Find(id);
+            return (from t in _context.Beneficiarios
+                    where t.IdBeneficiario == id
+                    select new Dto.BeneficiarioDto()
+                    {
+                        IdBeneficiario = t.IdBeneficiario,
+                        Nome = t.Nome,
+                        Cpf = t.Cpf,
+                        Telefone = t.Telefone,
+                        Endereco = t.Endereco,
+                        NumeroCarteirinha = t.NumeroCarteirinha,
+                        Ativo = t.Ativo,
+                        Email = t.Email,
+                        Senha = t.Senha
+
+                    })
+                    ?.FirstOrDefault()
+                    ?? new BeneficiarioDto();
         }
 
-
-        public void Inserir(Beneficiario beneficiario)
+        public int Cadastrar(BeneficiarioDto cadastrarDto)
         {
-            context.Beneficiarios.Add(beneficiario);
-            context.SaveChanges();
-        }
-
-        public void Alterar(Beneficiario beneficiario)
-        {
-            context.Beneficiarios.Update(beneficiario);
-            context.SaveChanges();
-        }
-
-        public void Excluir(int id)
-        {
-            // Criar um tipo produto apenas com o Id
-            var beneficiario = new Beneficiario()
+            Modelos.Beneficiario beneficiarioModelos = new Modelos.Beneficiario()
             {
-                IdBeneficiario = id
+                Nome = cadastrarDto.Nome,
+                Cpf = cadastrarDto.Cpf,
+                Telefone = cadastrarDto.Telefone,
+                Endereco = cadastrarDto.Endereco,
+                NumeroCarteirinha = cadastrarDto.NumeroCarteirinha,
+                Ativo = cadastrarDto.Ativo,
+                Email = cadastrarDto.Email,
+                Senha = cadastrarDto.Senha
             };
 
-            context.Beneficiarios.Remove(beneficiario);
-            context.SaveChanges();
+            _context.ChangeTracker.Clear();
+            _context.Beneficiarios.Add(beneficiarioModelos);
+            return _context.SaveChanges();
+        }  
+        
+        public int Atualizar(BeneficiarioDto cadastrarDto)
+        {
+            Modelos.Beneficiario benefiarioModeloBanco =
+                (from c in _context.Beneficiarios
+                 where c.IdBeneficiario == cadastrarDto.IdBeneficiario
+                 select c)
+                 ?.FirstOrDefault()
+                 ?? new Modelos.Beneficiario();
+
+            if (benefiarioModeloBanco == null || DBNull.Value.Equals(benefiarioModeloBanco.IdBeneficiario) || benefiarioModeloBanco.IdBeneficiario == 0)
+            {
+                return 0;
+            }
+
+            Modelos.Beneficiario beneficiarioModelo = new Modelos.Beneficiario()
+            {
+                Nome = cadastrarDto.Nome,
+                Cpf = cadastrarDto.Cpf,
+                Telefone = cadastrarDto.Telefone,
+                Endereco = cadastrarDto.Endereco,
+                NumeroCarteirinha = cadastrarDto.NumeroCarteirinha,
+                Ativo = cadastrarDto.Ativo,
+                Email = cadastrarDto.Email,
+                Senha = cadastrarDto.Senha
+            };
+
+            _context.ChangeTracker.Clear();
+            _context.Beneficiarios.Add(beneficiarioModelo);
+            return _context.SaveChanges();
+        }
+
+        public int Excluir(int Id)
+        {
+            Modelos.Beneficiario beneficiarioModeloBanco =
+                (from c in _context.Beneficiarios
+                 where c.IdBeneficiario == Id
+                 select c).FirstOrDefault();
+
+            if (beneficiarioModeloBanco == null || DBNull.Value.Equals(beneficiarioModeloBanco.IdBeneficiario) || beneficiarioModeloBanco.IdBeneficiario == 0)
+            {
+                return 0;
+            }
+
+            _context.ChangeTracker.Clear();
+            _context.Beneficiarios.Remove(beneficiarioModeloBanco);
+            return _context.SaveChanges();
         }
     }
 }

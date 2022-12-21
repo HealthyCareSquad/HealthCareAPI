@@ -16,8 +16,6 @@ namespace HealthyCare.Controllers
             _agendamentoRepository = agendamentoRepository;
         }
 
-
-
         [HttpGet]
         [Route("api/Consultar")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Projeto.Data.Dto.AgendamentoDto>))]

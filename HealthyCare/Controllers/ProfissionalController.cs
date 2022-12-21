@@ -83,6 +83,8 @@ namespace HealthyCare.Controllers
                 return NoContent();
 
             return BadRequest();
+
+            
         }
 
         [HttpPatch]

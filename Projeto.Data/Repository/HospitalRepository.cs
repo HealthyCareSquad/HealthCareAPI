@@ -1,4 +1,6 @@
 ﻿using Projeto.Data.Context;
+using Projeto.Data.Dto;
+using Projeto.Data.Interfaces;
 using Projeto.Data.Modelos;
 using System;
 using System.Collections.Generic;
@@ -8,50 +10,113 @@ using System.Threading.Tasks;
 
 namespace Projeto.Data.Repository
 {
-    public class HospitalRepository
+    public class HospitalRepository : IHospitalRepository
     {
-        private readonly DataBaseContext context;
+        private readonly Context.DataBaseContext _context;
 
-        public HospitalRepository()
+        public HospitalRepository(Context.DataBaseContext context)
         {
-            // Criando um instância da classe de contexto do EntityFramework
-            context = new DataBaseContext();
+            _context = context;
         }
 
-        public IList<Hospital> Listar()
+        public List<Dto.HospitalDto> Listar()
         {
+            return (from t in _context.Hospitals
+                    select new Dto.HospitalDto()
+                    {
+                        IdHospital = t.IdHospital,
+                        Nome = t.Nome,
+                        Cnpj = t.Cnpj,
+                        Endereço = t.Endereço,
+                        Telefone = t.Telefone,
+                        Cnes = t.Cnes,
+                        Ativo = t.Ativo
 
-            return context.Hospitals.ToList();
+
+                    }).ToList();
         }
 
-        public Hospital Consultar(int id)
+        public HospitalDto Consultar(int id)
         {
-            return context.Hospitals.Find(id);
+            return (from t in _context.Hospitals
+                    where t.IdHospital == id
+                    select new Dto.HospitalDto()
+                    {
+                        IdHospital = t.IdHospital,
+                        Nome = t.Nome,
+                        Cnpj = t.Cnpj,
+                        Endereço = t.Endereço,
+                        Telefone = t.Telefone,
+                        Cnes = t.Cnes,
+                        Ativo = t.Ativo
+                    })
+                    ?.FirstOrDefault()
+                    ?? new HospitalDto();
         }
 
-
-        public void Inserir(Hospital hospital)
+        public int Cadastrar(HospitalDto cadastrarDto)
         {
-            context.Hospitals.Add(hospital);
-            context.SaveChanges();
-        }
-
-        public void Alterar(Hospital hospital)
-        {
-            context.Hospitals.Update(hospital);
-            context.SaveChanges();
-        }
-
-        public void Excluir(int id)
-        {
-            // Criar um tipo produto apenas com o Id
-            var hospital = new Hospital()
+            Modelos.Hospital hospitalModelos = new Modelos.Hospital()
             {
-                IdHospital = id
+                IdHospital = cadastrarDto.IdHospital,
+                Nome = cadastrarDto.Nome,
+                Cnpj = cadastrarDto.Cnpj,
+                Endereço = cadastrarDto.Endereço,
+                Telefone = cadastrarDto.Telefone,
+                Cnes = cadastrarDto.Cnes,
+                Ativo = cadastrarDto.Ativo,
             };
 
-            context.Hospitals.Remove(hospital);
-            context.SaveChanges();
+            _context.ChangeTracker.Clear();
+            _context.Hospitals.Add(hospitalModelos);
+            return _context.SaveChanges();
+        }
+
+        public int Atualizar(HospitalDto cadastrarDto)
+        {
+            Modelos.Hospital hospitalModeloBanco =
+                (from c in _context.Hospitals
+                 where c.IdHospital == cadastrarDto.IdHospital
+                 select c)
+                 ?.FirstOrDefault()
+                 ?? new Modelos.Hospital();
+
+            if (hospitalModeloBanco == null || DBNull.Value.Equals(hospitalModeloBanco.IdHospital) || hospitalModeloBanco.IdHospital == 0)
+            {
+                return 0;
+            }
+
+            Modelos.Hospital hospitalModelos = new Modelos.Hospital()
+            {
+                IdHospital = cadastrarDto.IdHospital,
+                Nome = cadastrarDto.Nome,
+                Cnpj = cadastrarDto.Cnpj,
+                Endereço = cadastrarDto.Endereço,
+                Telefone = cadastrarDto.Telefone,
+                Cnes = cadastrarDto.Cnes,
+                Ativo = cadastrarDto.Ativo,
+            };
+
+            _context.ChangeTracker.Clear();
+            _context.Hospitals.Add(hospitalModelos);
+            return _context.SaveChanges();
+        }
+
+        public int Excluir(int Id)
+        {
+            Modelos.Hospital hospitalModeloBanco =
+                (from c in _context.Hospitals
+                 where c.IdHospital == Id
+                 select c).FirstOrDefault();
+
+            if (hospitalModeloBanco == null || DBNull.Value.Equals(hospitalModeloBanco.IdHospital) || hospitalModeloBanco.IdHospital == 0)
+            {
+                return 0;
+            }
+
+            _context.ChangeTracker.Clear();
+            _context.Hospitals.Remove(hospitalModeloBanco);
+            return _context.SaveChanges();
         }
     }
 }

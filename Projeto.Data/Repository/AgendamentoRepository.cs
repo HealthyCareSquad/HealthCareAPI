@@ -1,52 +1,117 @@
 ﻿using Projeto.Data.Context;
+using Projeto.Data.Dto;
+using Projeto.Data.Interfaces;
 using Projeto.Data.Modelos;
 
 namespace Projeto.Data.Repository
 {
-    public class AgendamentoRepository
+    public class AgendamentoRepository : IAgendamentoRepository
     {
-        private readonly DataBaseContext context;
+        private readonly Context.DataBaseContext _context;
 
-        public AgendamentoRepository()
+        public AgendamentoRepository(Context.DataBaseContext context)
         {
-            // Criando um instância da classe de contexto do EntityFramework
-            context = new DataBaseContext();
+            _context = context;
         }
 
-        public IList<Agendamento> Listar()
+        public List<Dto.AgendamentoDto> Listar()
         {
+            return (from t in _context.Agendamentos
+                    select new Dto.AgendamentoDto()
+                    {
+                        IdAgendamento = t.IdAgendamento,
+                        IdHospital = t.IdHospital,
+                        IdEspecialidade = t.IdEspecialidade,
+                        IdProfissional = t.IdProfissional,
+                        DataHoraAgendamento = t.DataHoraAgendamento,
+                        IdBeneficiario = t.IdBeneficiario,
+                        Ativo = t.Ativo
 
-            return context.Agendamentos.ToList();
+                    }).ToList();
         }
 
-        public Agendamento Consultar(int id)
+        public AgendamentoDto Consultar(int id)
         {
-            return context.Agendamentos.Find(id);
+            return (from t in _context.Agendamentos
+                    where t.IdAgendamento == id
+                    select new Dto.AgendamentoDto()
+                    {
+                        IdAgendamento = t.IdAgendamento,
+                        IdHospital = t.IdHospital,
+                        IdEspecialidade = t.IdEspecialidade,
+                        IdProfissional = t.IdProfissional,
+                        DataHoraAgendamento = t.DataHoraAgendamento,
+                        IdBeneficiario = t.IdBeneficiario,
+                        Ativo = t.Ativo
+
+                    })
+                    ?.FirstOrDefault()
+                    ?? new AgendamentoDto();
         }
 
-
-        public void Inserir(Agendamento agendamento)
+        public int Cadastrar(AgendamentoDto cadastrarDto)
         {
-            context.Agendamentos.Add(agendamento);
-            context.SaveChanges();
-        }
-
-        public void Alterar(Agendamento agendamento)
-        {
-            context.Agendamentos.Update(agendamento);
-            context.SaveChanges();
-        }
-
-        public void Excluir(int id)
-        {
-            // Criar um tipo produto apenas com o Id
-            var agendamento = new Agendamento()
+            Modelos.Agendamento agendamentoModelos = new Modelos.Agendamento()
             {
-                IdAgendamento = id
+                IdAgendamento = cadastrarDto.IdAgendamento,
+                IdHospital = cadastrarDto.IdHospital,
+                IdEspecialidade = cadastrarDto.IdEspecialidade,
+                IdProfissional = cadastrarDto.IdProfissional,
+                DataHoraAgendamento = cadastrarDto.DataHoraAgendamento,
+                IdBeneficiario = cadastrarDto.IdBeneficiario,
+                Ativo = cadastrarDto.Ativo
             };
 
-            context.Agendamentos.Remove(agendamento);
-            context.SaveChanges();
+            _context.ChangeTracker.Clear();
+            _context.Agendamentos.Add(agendamentoModelos);
+            return _context.SaveChanges();
+        }
+
+        public int Atualizar(AgendamentoDto cadastrarDto)
+        {
+            Modelos.Agendamento agendamentoModeloBanco =
+                (from c in _context.Agendamentos
+                 where c.IdAgendamento == cadastrarDto.IdAgendamento
+                 select c)
+                 ?.FirstOrDefault()
+                 ?? new Modelos.Agendamento();
+
+            if (agendamentoModeloBanco == null || DBNull.Value.Equals(agendamentoModeloBanco.IdAgendamento) || agendamentoModeloBanco.IdAgendamento == 0)
+            {
+                return 0;
+            }
+
+            Modelos.Agendamento agendamentoModelo = new Modelos.Agendamento()
+            {
+                IdAgendamento = cadastrarDto.IdAgendamento,
+                IdHospital = cadastrarDto.IdHospital,
+                IdEspecialidade = cadastrarDto.IdEspecialidade,
+                IdProfissional = cadastrarDto.IdProfissional,
+                DataHoraAgendamento = cadastrarDto.DataHoraAgendamento,
+                IdBeneficiario = cadastrarDto.IdBeneficiario,
+                Ativo = cadastrarDto.Ativo
+            };
+
+            _context.ChangeTracker.Clear();
+            _context.Agendamentos.Add(agendamentoModelo);
+            return _context.SaveChanges();
+        }
+
+        public int Excluir(int Id)
+        {
+            Modelos.Agendamento agendamentoModeloBanco =
+                (from c in _context.Agendamentos
+                 where c.IdAgendamento == Id
+                 select c).FirstOrDefault();
+
+            if (agendamentoModeloBanco == null || DBNull.Value.Equals(agendamentoModeloBanco.IdAgendamento) || agendamentoModeloBanco.IdAgendamento  == 0)
+            {
+                return 0;
+            }
+
+            _context.ChangeTracker.Clear();
+            _context.Agendamentos.Remove(agendamentoModeloBanco);
+            return _context.SaveChanges();
         }
     }
 }

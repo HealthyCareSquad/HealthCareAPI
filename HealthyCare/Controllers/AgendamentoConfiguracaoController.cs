@@ -5,13 +5,13 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 
-
 namespace HealthyCare.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class AgendamentoConfiguracaoController : ControllerBase
     {
+
         private readonly Projeto.Data.Interfaces.IAgendamentoConfiguracaoRepository _agendamentoConfiguracaoRepository;
 
         public AgendamentoConfiguracaoController(
