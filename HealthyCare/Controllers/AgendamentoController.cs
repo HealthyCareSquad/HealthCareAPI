@@ -78,6 +78,8 @@ namespace HealthyCare.Controllers
             if (cadastrarDto == null || cadastrarDto. IdHospital< 1)
                 return NoContent();
 
+            _agendamentoRepository.Cadastrar(cadastrarDto);
+
             return BadRequest();
         }
 
@@ -90,6 +92,8 @@ namespace HealthyCare.Controllers
             if (cadastrarDto == null || cadastrarDto.IdAgendamento < 1)
                 return NoContent();
 
+            _agendamentoRepository.Atualizar(cadastrarDto);
+
             return BadRequest();
         }
 
@@ -101,6 +105,7 @@ namespace HealthyCare.Controllers
         {
             if (id < 1)
                 return NoContent();
+            _agendamentoRepository.Excluir(id);
 
             return BadRequest();
         }
