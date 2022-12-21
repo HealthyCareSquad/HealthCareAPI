@@ -82,6 +82,8 @@ namespace HealthyCare.Controllers
             if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.Nome))
                 return NoContent();
 
+            _hospitalRepository.Cadastrar(cadastrarDto);
+
             return BadRequest();
         }
 
@@ -93,6 +95,8 @@ namespace HealthyCare.Controllers
         {
             if (cadastrarDto == null || String.IsNullOrEmpty(cadastrarDto.Nome))
                 return NoContent();
+
+            _hospitalRepository.Atualizar(cadastrarDto);
 
             return BadRequest();
         }
@@ -106,7 +110,9 @@ namespace HealthyCare.Controllers
             if (id < 1)
                 return NoContent();
 
-            return BadRequest();
+            _hospitalRepository.Excluir(id);
+
+            return Ok();
         }
     }
 }
