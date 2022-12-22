@@ -1,19 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Projeto.Data.Modelos;
 
 namespace Projeto.Data.Context;
 
-public partial class DataBaseContext : DbContext
+public partial class DataBaseContext1111 : DbContext
 {
-    public DataBaseContext()
+    private readonly IConfiguration _configuration;
+    public DataBaseContext1111()
     {
     }
-
-    public DataBaseContext(DbContextOptions<DataBaseContext> options)
-        : base(options)
+    public DataBaseContext1111(
+     DbContextOptions<DataBaseContext1111> options,
+     IConfiguration configuration)
+     : base(options)
     {
+        _configuration = configuration;
     }
 
     public virtual DbSet<Agendamento> Agendamentos { get; set; }
@@ -31,8 +36,7 @@ public partial class DataBaseContext : DbContext
     public virtual DbSet<Profissional> Profissionals { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=Projeto;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+    => optionsBuilder.UseSqlServer(_configuration.GetConnectionString("HealthyCareConnection"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -167,7 +171,7 @@ public partial class DataBaseContext : DbContext
 
         modelBuilder.Entity<Hospital>(entity =>
         {
-            entity.HasKey(e => e.IdHospital).HasName("PK__Hospital__AF70C2B21EA9C7BE");
+            entity.HasKey(e => e.IdHospital).HasName("PK__Hospital__AF70C2B230E6C1A2");
 
             entity.ToTable("Hospital");
 
