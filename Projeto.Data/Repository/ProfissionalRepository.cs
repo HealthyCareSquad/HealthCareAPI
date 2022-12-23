@@ -22,7 +22,7 @@ namespace Projeto.Data.Repository
                         IdProfissional = t.IdProfissional,
                         Nome = t.Nome,
                         Telefone = t.Telefone,
-                        Endereço = t.Endereço,
+                        Endereco = t.Endereco,
                         Ativo = t.Ativo
                     }).ToList();
         }
@@ -36,7 +36,7 @@ namespace Projeto.Data.Repository
                         IdProfissional = t.IdProfissional,
                         Nome = t.Nome,
                         Telefone = t.Telefone,
-                        Endereço = t.Endereço,
+                        Endereco = t.Endereco,
                         Ativo = t.Ativo
                     })
                     ?.FirstOrDefault()
@@ -49,7 +49,7 @@ namespace Projeto.Data.Repository
             {
                 IdProfissional = cadastrarDto.IdProfissional,
                 Nome = cadastrarDto.Nome,
-                Endereço = cadastrarDto.Endereço,
+                Endereco = cadastrarDto.Endereco,
                 Telefone = cadastrarDto.Telefone,
                 Ativo = cadastrarDto.Ativo,
             };
@@ -75,7 +75,7 @@ namespace Projeto.Data.Repository
 
             professionalModeloBanco.IdProfissional = cadastrarDto.IdProfissional;
             professionalModeloBanco.Nome = cadastrarDto.Nome;
-            professionalModeloBanco.Endereço = cadastrarDto.Endereço;
+            professionalModeloBanco.Endereco = cadastrarDto.Endereco;
             professionalModeloBanco.Telefone = cadastrarDto.Telefone;
             professionalModeloBanco.Ativo = cadastrarDto.Ativo;
             

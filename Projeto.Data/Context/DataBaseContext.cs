@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Projeto.Data.Modelos;
 
 namespace Projeto.Data.Context;
@@ -159,7 +161,7 @@ public partial class DataBaseContext : DbContext
 
             entity.ToTable("Especialidade");
 
-            entity.Property(e => e.Descrição).IsUnicode(false);
+            entity.Property(e => e.Descricao).IsUnicode(false);
             entity.Property(e => e.Nome)
                 .HasMaxLength(100)
                 .IsUnicode(false);
@@ -180,7 +182,7 @@ public partial class DataBaseContext : DbContext
                 .HasMaxLength(25)
                 .IsUnicode(false)
                 .HasColumnName("CNPJ");
-            entity.Property(e => e.Endereço).IsUnicode(false);
+            entity.Property(e => e.Endereco).IsUnicode(false);
             entity.Property(e => e.Nome).IsUnicode(false);
             entity.Property(e => e.Telefone)
                 .HasMaxLength(15)
@@ -193,7 +195,7 @@ public partial class DataBaseContext : DbContext
 
             entity.ToTable("Profissional");
 
-            entity.Property(e => e.Endereço).IsUnicode(false);
+            entity.Property(e => e.Endereco).IsUnicode(false);
             entity.Property(e => e.Nome).IsUnicode(false);
             entity.Property(e => e.Telefone)
                 .HasMaxLength(15)

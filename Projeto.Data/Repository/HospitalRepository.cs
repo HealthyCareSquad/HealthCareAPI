@@ -27,7 +27,7 @@ namespace Projeto.Data.Repository
                         IdHospital = t.IdHospital,
                         Nome = t.Nome,
                         Cnpj = t.Cnpj,
-                        Endereço = t.Endereço,
+                        Endereco = t.Endereco,
                         Telefone = t.Telefone,
                         Cnes = t.Cnes,
                         Ativo = t.Ativo
@@ -45,7 +45,7 @@ namespace Projeto.Data.Repository
                         IdHospital = t.IdHospital,
                         Nome = t.Nome,
                         Cnpj = t.Cnpj,
-                        Endereço = t.Endereço,
+                        Endereco = t.Endereco,
                         Telefone = t.Telefone,
                         Cnes = t.Cnes,
                         Ativo = t.Ativo
@@ -61,7 +61,7 @@ namespace Projeto.Data.Repository
                 IdHospital = cadastrarDto.IdHospital,
                 Nome = cadastrarDto.Nome,
                 Cnpj = cadastrarDto.Cnpj,
-                Endereço = cadastrarDto.Endereço,
+                Endereco = cadastrarDto.Endereco,
                 Telefone = cadastrarDto.Telefone,
                 Cnes = cadastrarDto.Cnes,
                 Ativo = cadastrarDto.Ativo,
@@ -90,7 +90,7 @@ namespace Projeto.Data.Repository
             hospitalModeloBanco.IdHospital = cadastrarDto.IdHospital;
             hospitalModeloBanco.Nome = cadastrarDto.Nome;
             hospitalModeloBanco.Cnpj = cadastrarDto.Cnpj;
-            hospitalModeloBanco.Endereço = cadastrarDto.Endereço;
+            hospitalModeloBanco.Endereco = cadastrarDto.Endereco;
             hospitalModeloBanco.Telefone = cadastrarDto.Telefone;
             hospitalModeloBanco.Cnes = cadastrarDto.Cnes;
             hospitalModeloBanco.Ativo = cadastrarDto.Ativo;

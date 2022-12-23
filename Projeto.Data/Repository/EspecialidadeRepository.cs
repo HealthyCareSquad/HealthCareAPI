@@ -21,7 +21,7 @@ namespace Projeto.Data.Repository
                     {
                         IdEspecialidade = t.IdEspecialidade,
                         Nome = t.Nome,
-                        Descrição = t.Descrição,
+                        Descricao = t.Descricao,
                         Ativo = t.Ativo
                     }).ToList();
         }
@@ -34,7 +34,7 @@ namespace Projeto.Data.Repository
                     {
                         IdEspecialidade = t.IdEspecialidade,
                         Nome = t.Nome,
-                        Descrição = t.Descrição,
+                        Descricao = t.Descricao,
                         Ativo = t.Ativo
                     })
                     ?.FirstOrDefault()
@@ -47,7 +47,7 @@ namespace Projeto.Data.Repository
             {
                 IdEspecialidade = cadastrarDto.IdEspecialidade,
                 Nome = cadastrarDto.Nome,
-                Descrição = cadastrarDto.Descrição,
+                Descricao = cadastrarDto.Descricao,
                 Ativo = cadastrarDto.Ativo,
             };
 
@@ -72,7 +72,7 @@ namespace Projeto.Data.Repository
 
             especialidadeModeloBanco.IdEspecialidade = cadastrarDto.IdEspecialidade;
             especialidadeModeloBanco.Nome = cadastrarDto.Nome;
-            especialidadeModeloBanco.Descrição = cadastrarDto.Descrição;
+            especialidadeModeloBanco.Descricao = cadastrarDto.Descricao;
             especialidadeModeloBanco.Ativo = cadastrarDto.Ativo;
 
             _context.ChangeTracker.Clear();
